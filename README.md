@@ -1,4 +1,4 @@
-# t3_segmentation
+# plant_disease_identification
 
 
 ### How to run?
@@ -18,7 +18,7 @@ Open a command prompt at the root folder of this repository, inside run the foll
 ## Google Colab
 ```
 !shred -u setup_colab.py
-!wget "https://raw.githubusercontent.com/VivianGomez/t3_segmentation/master/setup_colab.py" -O setup_colab.py
+!wget "https://raw.githubusercontent.com/VivianGomez/plant_disease_identification/master/setup_colab.py" -O setup_colab.py
 import setup_colab as setup
 setup.setup_workshop()
 ```
