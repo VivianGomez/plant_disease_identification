@@ -1,6 +1,8 @@
 scikit-image
 scikit-learn
 numpy
+keras
+tqdm
 matplotlib
 requests
 jupyter
