@@ -1,22 +1,39 @@
-import os
 import requests
+import sys
+from tqdm.auto import tqdm
+import numpy as np
+import os
 
-def download_github_content(path):
-    dir = path.rsplit("/", 1)[0]
-    if not os.path.exists(dir):
-        os.makedirs(dir)
-        os.system(f"touch {dir}/__init__.py")
-
-    elif not os.path.exists(f"{dir}/__init__.py"):
-        os.system(f"touch {dir}/__init__.py")
-
-    os.system(f"shred -u {path}")
-    os.system(f"wget https://raw.githubusercontent.com/VivianGomez/plant_disease_identification
-    master/{path} -O {path}")
-
-def setup_workshop():
+def download_github_content(path, filename, chnksz=1000):
+    url = f"https://raw.githubusercontent.com/VivianGomez/plant_disease_identification/main/{path}"
+    
     try:
-        download_github_content("utils/")
-        print("Workshop enabled successfully!")
+        r = requests.get(url, stream=True)
     except Exception as e:
-        raise e
+        print(f"Error de conexión con el servidor: {e}")
+        sys.exit()
+        
+    with open(filename, "wb") as f:
+        try:
+            total = int(np.ceil(int(r.headers.get("content-length"))/chnksz))
+        except:
+            total = 0
+
+        gen = r.iter_content(chunk_size=chnksz)
+
+        for pkg in tqdm(gen, total=total, unit="KB"):
+            f.write(pkg)
+
+        f.close()
+        r.close()
+    return
+
+def setup_general():
+    os.makedirs("utils", exist_ok=True)
+    with open("utils/__init__.py", "wb") as f:
+        f.close()
+
+    download_github_content("utils/general.py", "utils/general.py")
+    print("General Functions Enabled Successfully")
+  
+ 
